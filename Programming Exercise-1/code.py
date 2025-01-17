@@ -3,15 +3,23 @@ import string
 from time import sleep
 import math
 universal_set=list(string.ascii_lowercase)
+
+
 # Hashing
 # Reference:- https://gist.github.com/amakukha/7854a3e910cb5866b53bf4b2af1af968
 # Initially used djb2, but as pointed out on this webpage ☝️, it suffers from avalanching
-def hash_sdbm(s):
-    hash=0
+def hash_fnv1a(s):
+    hash=0x811c9dc5
     for x in s:
-        hash=((hash << 16)+(hash << 6)+ord(x)-hash) & 0xFFFFFFFF
-    return "".join([universal_set[int(i)] for i in str(hash)])
-print(hash_sdbm("whatislovebabydonthurtmedonthurtmenomore"))
+        hash=((ord(x)^hash)* 0x01000193) & 0xFFFFFFFF
+    hash="".join([universal_set[int(i)] for i in str(hash)])
+    if len(hash)<10:
+        hash+=(10-len(hash))*"y"
+    return hash
+# guinea="abcd"
+# print(hash_fnv1a(guinea))
+# print(len(str(hash_fnv1a(guinea))))
+# print(len(guinea))
 
 
 #Encryption
@@ -35,7 +43,7 @@ if len(key)!=key_size or not set([i for i in key]).issubset(set(["1","2","3","4"
     exit()
 sleep(1)
 print("Key is acceptable\n")
-plaintext+=hash_sdbm(plaintext)
+plaintext+=hash_fnv1a(plaintext)
 # print(plaintext)
 # Number of Columns in the table == key_size
 # Number of Rows in the table == ceil(len(concatenatedtext)/key_size)
