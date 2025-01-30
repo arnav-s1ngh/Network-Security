@@ -1,3 +1,15 @@
 # Network-Security
 
-Programming Exercises for Network Security, as taught by Prof. BN Jain at IIIT Delhi
+**Sample Inputs and Outputs**
+
+| Plaintext | Ciphertext       |
+|---------------|--------------|
+| A | B |
+| B | C|
+| C | F |
+| D| G|
+| E| I|
+| F | E |
+| G | H |
+| H | A|
+
