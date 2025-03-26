@@ -89,7 +89,7 @@ class client:
             cert_list=crt[0].split(",")
             toi=cert_list[3]
             dur=cert_list[4]
-            if int(toi)<=int(time.time())<=int(toi)+int(dur):
+            if int(toi)<=int(time.time())<int(toi)+int(dur):
                 print("Certificate has not expired")
                 if cert_list[0]==cid:
                     print("Certificate ID matches actual ID")
@@ -99,7 +99,7 @@ class client:
         return False
 
 
-cert_auth=certificate_authority(duration=1000,certificate_authority_id=10001)
+cert_auth=certificate_authority(duration=1,certificate_authority_id=10001)
 client_alice=client("Alice",cert_auth)
 client_bob=client("Bob",cert_auth)
 print("\nClients request their own certificates\n")
