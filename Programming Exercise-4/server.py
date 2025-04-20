@@ -9,7 +9,7 @@ server_app=Flask(__name__)
 def get_timeapi_time():
     resp=""
     try:
-        response=requests.get("https://timeapi.io/api/Time/current/zone?timeZone=UTC")
+        response=requests.get("https://timeapi.io/api/Time/current/zone?timeZone=GMT")
         if response.status_code==200:
             timeapi_time=response.json()
             # print(timeapi_time)
