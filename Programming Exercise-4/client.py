@@ -3,6 +3,7 @@ from time import sleep
 import requests
 import fitz
 import hashlib
+import rsa
 def hash_function(pth):
     file=fitz.open(pth)
     file_text=""
@@ -14,6 +15,15 @@ def hash_function(pth):
     print(f"File Hash:- {file_hash}")
     return file_hash
 # hash_function("document.pdf")
+def verify_signature(pdf_hash,timestamp,signature,public_key):
+    try:
+        message=f"{pdf_hash}|{timestamp}".encode('utf-8')
+        rsa.verify(message,signature,public_key)
+        print("Signature is valid")
+        return True
+    except rsa.VerificationError:
+        print("Signature is invalid")
+        return False
 def add_timestamp_to_pdf(pth,timestamp,sig):
     doc=fitz.open(pth)
     f_page=doc[0]
@@ -38,7 +48,11 @@ def client_server_channel():
         print(timestamp)
         signature=result["signature"]
         print(signature)
-        add_timestamp_to_pdf(file_name, timestamp, signature)
+        if verify_signature(file_hash,timestamp,bytes.fromhex(signature),rsa.PublicKey.load_pkcs1((result["public_key"]).encode('utf-8'))):
+            add_timestamp_to_pdf(file_name, timestamp, signature)
+        else:
+            print("Validation Failed. Aborting")
+            exit()
     else:
         print("Request failed gracefully")
         print(response.status_code)
