@@ -17,7 +17,7 @@ def hash_function(pth):
 def add_timestamp_to_pdf(pth,timestamp,sig):
     doc=fitz.open(pth)
     f_page=doc[0]
-    f_page.insert_textbox(fitz.Rect(20, 20, 500, 100),f"Signature: {sig}\nTimestamp: {timestamp}",fontsize=1,color=(0.999,0.4,0.5))
+    f_page.insert_textbox(fitz.Rect(20, 20, 500, 100),f"Signature: {sig}\nTimestamp: {timestamp}",fontsize=2,color=(0.999,0.4,0.5))
     new_file_loc=pth.replace(".pdf","_stamped.pdf")
     doc.save(new_file_loc)
     print(f"\nThe timestamped pdf was saved at:- {new_file_loc}\n")
@@ -30,7 +30,7 @@ def client_server_channel():
     file_name=input("Enter the path for the file you wish to have time-stamped:- ")
     file_hash=hash_function(file_name)
     print(f"\nSending hash {file_hash} to timestamping server")
-    response=requests.post("http://localhost:5000/timestamp", json={"hash":file_hash})
+    response=requests.post("https://localhost:5000/timestamp", json={"hash":file_hash}, verify="cert.pem")
     if response.status_code==200:
         print("\nRequest executed successfully\n")
         result=response.json()
