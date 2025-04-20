@@ -48,6 +48,7 @@ def client_server_channel():
         print(timestamp)
         signature=result["signature"]
         print(signature)
+        print(result["public_key"])
         if verify_signature(file_hash,timestamp,bytes.fromhex(signature),rsa.PublicKey.load_pkcs1((result["public_key"]).encode('utf-8'))):
             add_timestamp_to_pdf(file_name, timestamp, signature)
         else:
